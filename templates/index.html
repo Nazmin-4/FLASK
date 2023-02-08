@@ -1,0 +1,11 @@
+{%extends 'base.html'%}
+{% block body %}
+   <h1> FORM</h1>
+        <form action="/myform" method="post">
+            <input type="text" name="name" placeholder="username"/>
+            <br/>
+            <input type="password" name="password" placeholder="password"/>
+            <br/>
+            <button type="submit">submit</button>
+        </form>
+        {%endblock%}
