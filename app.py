@@ -59,7 +59,11 @@ def log():
             else:
                 return "user not found"
         else:
-            return "get request"
+            # return "get request"
+            if 'name' in session:
+                return render_template("myform.html",msg=session["name"])
+            else:
+                return "Get Request"
 
 @myapp.route("/logout")
 def logout():
