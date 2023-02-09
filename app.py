@@ -1,4 +1,4 @@
-from flask import Flask,render_template,request
+from flask import Flask,render_template,request,session,redirect
 from mysql.connector import connect
 con=connect(host='localhost',port=3306,database='mysql' #database name
 ,user='root')
@@ -7,11 +7,14 @@ con=connect(host='localhost',port=3306,database='mysql' #database name
 # cur.execute("insert into CSE values('sravani',4)")
 # con.commit()
 myapp=Flask(__name__)
+myapp.secret_key="kjhgfds"
 @myapp.route("/")
 def regg():
     return render_template("reg.html")
 
 @myapp.route("/home")
+def hi():
+    return redirect("/login")
 @myapp.route("/index")
 def hello():
     return render_template("index.html")
@@ -40,20 +43,27 @@ def myform():
         return "get request"
 @myapp.route("/login",methods=["GET","POST"])
 def log():
-    if request.method=="POST": 
-        user=request.form["name"]
-        password=request.form["password"]
-        cur=con.cursor()
-        cur.execute("Select * from reg where name=%s and password=%s",(user,password))
-        a=cur.fetchone()
-        print(a)
-        if a is not None:
-            return render_template("myform.html",msg=user)
-        else:
-            return "user not found"
+    if 'name' in session: #if session["name"] or session.get("name")
+        return render_template("myform.html",msg=session["name"])
     else:
-        return "get request"
+        if request.method=="POST": 
+            user=request.form["name"]
+            password=request.form["password"]
+            cur=con.cursor()
+            session["name"]=user
+            cur.execute("Select * from reg where name=%s and password=%s",(user,password))
+            a=cur.fetchone()
+            print(a)
+            if a is not None:
+                return render_template("myform.html",msg=user)
+            else:
+                return "user not found"
+        else:
+            return "get request"
 
-
+@myapp.route("/logout")
+def logout():
+    session.clear()
+    return "logged out"
 if __name__=="__main__":
     myapp.run(debug=True)
