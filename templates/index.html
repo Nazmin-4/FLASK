@@ -1,11 +1,11 @@
 {%extends 'base.html'%}
 {% block body %}
-   <h1> FORM</h1>
-        <form action="/myform" method="post">
+   <h1> LOGIN FORM</h1>
+        <form action="/login" method="post">
             <input type="text" name="name" placeholder="username"/>
             <br/>
             <input type="password" name="password" placeholder="password"/>
             <br/>
-            <button type="submit">submit</button>
+            <button type="submit">login</button>
         </form>
         {%endblock%}
